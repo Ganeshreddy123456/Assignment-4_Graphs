@@ -1,0 +1,233 @@
+Assignment _4: Graphs
+
+
+1)-Breadth First Traversal for a Graph
+
+function breadthFirstTraversal(graph, startNode) {
+  const queue = [];
+  queue.push(startNode);
+
+  while (queue.length > 0) {
+    const node = queue.shift();
+    console.log(node);
+
+    for (const neighbor of graph[node]) {
+      queue.push(neighbor);
+    }
+  }
+}
+
+function main() {
+  const graph = {
+    "A": ["B", "C"],
+    "B": ["D", "E"],
+    "C": ["F", "G"],
+    "D": [],
+    "E": [],
+    "F": [],
+    "G": [],
+  };
+
+  breadthFirstTraversal(graph, "A");
+}
+
+if (require.main === module) {
+  main();
+}
+
+2)-Depth First Traversal for a Graph
+
+function depthFirstTraversal(graph, startNode) {
+  const visited = {};
+
+  function dfs(node) {
+    if (visited[node]) {
+      return;
+    }
+
+    console.log(node);
+    visited[node] = true;
+
+    for (const neighbor of graph[node]) {
+      dfs(neighbor);
+    }
+  }
+
+  dfs(startNode);
+}
+
+function main() {
+  const graph = {
+    "A": ["B", "C"],
+    "B": ["D", "E"],
+    "C": ["F", "G"],
+    "D": [],
+    "E": [],
+    "F": [],
+    "G": [],
+  };
+
+  depthFirstTraversal(graph, "A");
+}
+
+if (require.main === module) {
+  main();
+}
+
+3)-Count the number of nodes at given level in a tree using BFS
+
+function countNodesAtGivenLevel(root, level) {
+  if (root === null) {
+    return 0;
+  } else if (level === 0) {
+    return 1;
+  } else {
+    const count = 0;
+    const queue = [];
+    queue.push(root);
+
+    while (queue.length > 0) {
+      const node = queue.shift();
+
+      if (level === node.level) {
+        count++;
+      }
+
+      if (node.left !== null) {
+        node.left.level = level - 1;
+        queue.push(node.left);
+      }
+
+      if (node.right !== null) {
+        node.right.level = level - 1;
+        queue.push(node.right);
+      }
+    }
+
+    return count;
+  }
+}
+
+function main() {
+  const tree = new BinaryTree();
+  tree.insert(10);
+  tree.insert(5);
+  tree.insert(15);
+  tree.insert(2);
+  tree.insert(7);
+  tree.insert(12);
+  tree.insert(17);
+
+  const level = 2;
+
+  const count = countNodesAtGivenLevel(tree.root, level);
+
+  console.log("The number of nodes at level", level, "is", count);
+}
+
+if (require.main === module) {
+  main();
+}
+
+4)-Count number of trees in a forest
+
+function countTreesInForest(forest) {
+  if (forest.length === 0) {
+    return 1;
+  } else {
+    const count = 0;
+
+    for (const tree of forest) {
+      if (isTree(tree)) {
+        count++;
+      } else {
+        count += countTreesInForest(tree);
+      }
+    }
+
+    return count;
+  }
+}
+
+function isTree(tree) {
+  if (tree.length === 0) {
+    return false;
+  } else if (tree.length === 1) {
+    return true;
+  } else {
+    const root = tree[0];
+
+    for (const child of tree) {
+      if (child !== root && !isTree(child)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+}
+
+function main() {
+  const forest = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+  ];
+
+  const count = countTreesInForest(forest);
+
+  console.log("The number of trees in the forest is", count);
+}
+
+if (require.main === module) {
+  main();
+}
+
+5)-Detect Cycle in a Directed Graph
+
+function detectCycleInDirectedGraph(graph) {
+  const visited = {};
+  const dfs = (node) => {
+    if (visited[node]) {
+      return true;
+    }
+
+    visited[node] = true;
+
+    for (const neighbor of graph[node]) {
+      if (dfs(neighbor)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  for (const node of Object.keys(graph)) {
+    if (dfs(node)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function main() {
+  const graph = {
+    "A": ["B", "C"],
+    "B": ["D", "E"],
+    "C": ["F", "G"],
+    "D": [],
+    "E": [],
+    "F": [],
+    "G": [],
+  };
+
+  const hasCycle = detectCycleInDirectedGraph(graph);
+
+  console.log("Does the graph have a cycle?", hasCycle);
+}
+
+if (require.main === module) {
+  main();
+}
